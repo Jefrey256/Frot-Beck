@@ -1,0 +1,12 @@
+{
+"scripts": {
+  "dev": "concurrently \"npm run start:backend\" \"npm run start:frontend\"",
+  "start:backend": "cd pico && npm run start",
+  "start:frontend": "cd chico && npm run dev"
+  },
+
+  "name": "projeto-front-beck",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT"
+}

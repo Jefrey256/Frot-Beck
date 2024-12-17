@@ -1,0 +1,23 @@
+import React from "react";
+import axios from "axios";
+
+const App:React.FC = () =>{
+  const startBot = async ()=>{
+    try{
+      const response = await axios.get("http://localhost:3001/start-bot")
+      alert(response.data.message)
+    } cath (error) {
+      console.log(`erro ao iniciar o Bot: `, error)
+      alert("falha ao iiniciae o bor")
+    }
+  }
+  return(
+    <div>
+      <h1>WhatsApp Bot Controller</h1>
+      <button onClick={startBot}>Iniciar Bot</button>
+    </div>
+  )
+}
+
+export default App
+

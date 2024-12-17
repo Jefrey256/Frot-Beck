@@ -1,0 +1,27 @@
+{
+  "name": "pico",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "start": "ts-node src/index.ts",
+    "build": "tsc",
+    "serve": "node build/server.js"
+  },
+   "resolutions": {
+    "pino": "9.5.0"},
+  "dependencies": {
+    "@types/express": "^5.0.0",
+    "@types/node": "^22.10.2",
+    "baileys": "^6.7.9",
+    "cors": "^2.8.5",
+    "express": "^4.21.2",
+    "fs": "^0.0.1-security",
+    "path": "^0.12.7",
+    "pino": "^9.5.0",
+    "qrcode-terminal": "^0.12.0",
+    "readline": "^1.3.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.7.2"
+  }
+}
