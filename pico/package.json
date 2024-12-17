@@ -8,13 +8,15 @@
     "build": "tsc",
     "serve": "node build/server.js"
   },
-   "resolutions": {
-    "pino": "9.5.0"},
+  "resolutions": {
+    "pino": "9.5.0"
+  },
   "dependencies": {
     "@types/express": "^5.0.0",
     "@types/node": "^22.10.2",
     "baileys": "^6.7.9",
     "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
     "express": "^4.21.2",
     "fs": "^0.0.1-security",
     "path": "^0.12.7",

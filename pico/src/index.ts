@@ -7,13 +7,15 @@ import cors from "cors";
 import path from "path";
 import { Boom } from "@hapi/boom";
 import { question } from "./exports/index"; // Corrigido o import
+import pino from "pino";
+import dotenv from 'dotenv'
 
 async function main() {
   // Estado de autenticação
   const { state, saveCreds } = await useMultiFileAuthState(
     path.resolve(__dirname, "../database/qr-code")
   );
-
+  dotenv.config()
   const app = express();
   const PORT = process.env.PORT || 3001;
 
@@ -22,32 +24,29 @@ async function main() {
 
   // Função principal do bot
   async function chico(): Promise<void> {
+    const logger = pino({
+      level: "info",})
     const pico = makeWASocket({
+      logger,
       auth: state,
       browser: ["Ubuntu", "Chrome", "20.0.04"],
-      printQRInTerminal: true,
+      markOnlineOnConnect: true,
+      printQRInTerminal: false,
     });
 
     pico.ev.on("connection.update", (update) => {
       const { connection, lastDisconnect } = update;
-
+  
       if (connection === "close") {
-        const statusCode = (lastDisconnect?.error as Boom)?.output?.statusCode;
-
-        console.log(
-          "Conexão fechada devido ao erro:",
-          lastDisconnect?.error,
-          "Código:",
-          statusCode
-        );
-
-        if (statusCode !== DisconnectReason.loggedOut) {
-          chico(); // Reconecta automaticamente
-        } else {
-          console.log("Desconectado permanentemente. É necessário escanear o QR novamente.");
+        const shouldReconnect = (lastDisconnect?.error as any)?.statusCode !== DisconnectReason.loggedOut;
+  
+        console.log("Conexão fechada devido ao erro:", lastDisconnect?.error, "Tentando reconectar...", shouldReconnect);
+  
+        if (shouldReconnect) {
+          chico(); // Reconecta
         }
       } else if (connection === "open") {
-        console.log("Conexão estabelecida com sucesso!");
+        console.log("Conexão aberta com sucesso!");
       }
     });
 
@@ -57,12 +56,15 @@ async function main() {
       phoneNumber = phoneNumber.replace(/[^0-9]/g, "");
 
       if (!phoneNumber) {
-        throw new Error("Número de telefone inválido");
+          throw new Error("Número de telefone inválido");
       }
 
       const code: string = await pico.requestPairingCode(phoneNumber);
       console.log(`Código de pareamento: ${code}`);
-    }
+  }
+
+  
+
 
     // Escuta atualizações das credenciais
     pico.ev.on("creds.update", saveCreds);

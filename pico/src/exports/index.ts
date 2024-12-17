@@ -1,17 +1,10 @@
-import fs from "fs"
-import readline from "readline/promises"
+import readline from "readline/promises";
+import { stdin as input, stdout as output } from "node:process";
 
+const rl = readline.createInterface({ input, output });
 
-const rl = readline.createInterface({
-  input: process.stdin,
-  output: process.stdout
-})
+const question = (text: string): Promise<string> => {
+  return rl.question(text);
+};
 
-const question = (text): Promise <string>=>{
-  return new Promise((resolve)=>{
-    rl.question(text.resolve)
-  })
-
-}
-
-export  {question}
+export { question };
